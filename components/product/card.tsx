@@ -42,11 +42,13 @@ export function ProductCard({
         )}
       </Link>
       <div className="product-body">
-        <span className="category-label">{category?.name || "기타"}</span>
+        {category && <span className="category-label">{category.name}</span>}
         <Link href={`/product/${product.slug}`}>
           <h3>{product.name}</h3>
         </Link>
-        <p className="one-line">“{product.short_description}”</p>
+        {product.short_description && (
+          <p className="one-line">“{product.short_description}”</p>
+        )}
         <AffiliateLink product={product} videoId={videoId} />
       </div>
     </article>

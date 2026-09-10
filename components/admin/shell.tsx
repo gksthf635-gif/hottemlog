@@ -4,8 +4,6 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Clapperboard,
-  Package,
-  Tags,
   ChartNoAxesCombined,
   Settings,
   ArrowUpRight,
@@ -15,11 +13,9 @@ import {
 import { logout } from "@/app/admin/actions";
 const menus = [
   { href: "/admin", label: "대시보드", icon: LayoutDashboard },
-  { href: "/admin/videos", label: "영상 관리", icon: Clapperboard },
-  { href: "/admin/products", label: "상품 관리", icon: Package },
-  { href: "/admin/categories", label: "카테고리", icon: Tags },
-  { href: "/admin/analytics", label: "클릭 통계", icon: ChartNoAxesCombined },
-  { href: "/admin/settings", label: "사이트 설정", icon: Settings },
+  { href: "/admin/contents", label: "콘텐츠 관리", icon: Clapperboard },
+  { href: "/admin/analytics", label: "통계", icon: ChartNoAxesCombined },
+  { href: "/admin/settings", label: "설정", icon: Settings },
 ];
 export function AdminShell({
   name,

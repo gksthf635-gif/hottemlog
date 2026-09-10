@@ -2041,3 +2041,12 @@ th:first-child {
     right: -30px;
   }
 }
+
+.bundle-fields { border: 0; padding: 0; margin: 0; min-width: 0; }
+.bundle-product { margin: 20px 0; }
+.bundle-tools { display: flex; gap: 10px; flex-wrap: wrap; margin: 14px 0; }
+.bundle-picker { padding: 16px; background: #fff5f8; border-radius: 16px; }
+.bundle-results { display: grid; max-height: 220px; overflow: auto; gap: 6px; }
+.bundle-results button { text-align: left; background: white; padding: 12px; border-radius: 10px; }
+.bundle-submit { position: sticky; bottom: 0; background: #fffafc; padding: 16px; border-top: 1px solid #f3dce5; z-index: 5; padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+@media(max-width:640px) { .bundle-form .form-panel { padding: 18px; } .bundle-submit .button { flex: 1; } }

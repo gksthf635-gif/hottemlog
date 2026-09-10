@@ -80,14 +80,22 @@ export default async function ProductDetail({
           />
         </div>
         <div className="detail-copy">
-          <span className="category-label">{category?.name || "기타"}</span>
+          {category && <span className="category-label">{category.name}</span>}
           <h1>{p.name}</h1>
-          <p className="detail-quote">“{p.short_description}”</p>
-          <div className="prose">
-            <p>{p.description}</p>
-            <h2>한솔이 추천하는 이유</h2>
-            <p>{p.recommendation}</p>
-          </div>
+          {p.short_description && (
+            <p className="detail-quote">“{p.short_description}”</p>
+          )}
+          {(p.description || p.recommendation) && (
+            <div className="prose">
+              {p.description && <p>{p.description}</p>}
+              {p.recommendation && (
+                <>
+                  <h2>한솔이 추천하는 이유</h2>
+                  <p>{p.recommendation}</p>
+                </>
+              )}
+            </div>
+          )}
           {p.recommend_points.length > 0 && (
             <>
               <h2 className="subheading">이런 점이 좋아요</h2>

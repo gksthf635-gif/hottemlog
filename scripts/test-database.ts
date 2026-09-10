@@ -16,7 +16,11 @@ async function main() {
  create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);
  create table storage.objects(id uuid primary key default gen_random_uuid(),bucket_id text references storage.buckets(id),name text);
  alter table storage.objects enable row level security; grant usage on schema storage to anon,authenticated; grant select,insert,update,delete on storage.objects to anon,authenticated;`);
-    for (const file of ["202609100001_schema.sql", "202609100002_seed.sql"])
+    for (const file of [
+      "202609100001_schema.sql",
+      "202609100002_seed.sql",
+      "202609110001_content_editor.sql",
+    ])
       await db.exec(await readFile(`supabase/migrations/${file}`, "utf8"));
     const count = async (table: string) =>
       Number(
@@ -191,6 +195,108 @@ async function main() {
     assert.ok(Array.isArray(popularity.products));
     assert.ok(popularity.videos.length > 0);
     check("Public popularity returns only safe aggregates");
+    await db.exec("reset role; set role authenticated");
+    await db.query("select set_config('request.jwt.claim.sub',$1,false)", [
+      admin,
+    ]);
+    const minimalVideo = {
+      title: "통합 저장",
+      platform: "youtube",
+      video_url: "https://youtube.com/shorts/abcdefghijk",
+      published: false,
+    };
+    const minimalProduct = {
+      name: "필수 입력만",
+      affiliate_url: "https://link.coupang.com/a/test",
+      description: "ignored",
+    };
+    const bundle = async (video: object, products: object[]) =>
+      (
+        await db.query<{ id: string }>(
+          "select public.save_content_bundle($1::jsonb,$2::jsonb) id",
+          [JSON.stringify(video), JSON.stringify(products)],
+        )
+      ).rows[0].id;
+    const before = await count("products");
+    const vid = await bundle(minimalVideo, [minimalProduct]);
+    const prod = (
+      await db.query<{ id: string }>(
+        "select product_id id from public.video_products where video_id=$1",
+        [vid],
+      )
+    ).rows[0].id;
+    assert.equal(await count("products"), before + 1);
+    await db.query(
+      "update public.products set description='보존할 설명' where id=$1",
+      [prod],
+    );
+    const second = await bundle(
+      {
+        ...minimalVideo,
+        platform: "instagram",
+        video_url: "https://instagram.com/reel/test",
+        published: true,
+      },
+      [
+        { ...minimalProduct, id: prod },
+        { ...minimalProduct, name: "두 번째 상품" },
+      ],
+    );
+    assert.equal(await count("products"), before + 2);
+    assert.equal(
+      (
+        await db.query<{ description: string }>(
+          "select description from public.products where id=$1",
+          [prod],
+        )
+      ).rows[0].description,
+      "보존할 설명",
+    );
+    check(
+      "YouTube / Instagram minimal bundles, shared product reuse and legacy preservation",
+    );
+    const beforeVideos = await count("videos");
+    await assert.rejects(() =>
+      bundle(minimalVideo, [
+        minimalProduct,
+        { name: "bad", affiliate_url: "https://example.com" },
+      ]),
+    );
+    assert.equal(await count("videos"), beforeVideos);
+    assert.equal(await count("products"), before + 2);
+    await assert.rejects(() => bundle(minimalVideo, []));
+    await assert.rejects(() =>
+      bundle(minimalVideo, [
+        { ...minimalProduct, id: prod },
+        { ...minimalProduct, id: prod },
+      ]),
+    );
+    check(
+      "Bundle failure rolls back every write; empty and duplicate products rejected",
+    );
+    await db.query("select public.set_content_publication($1,true)", [vid]);
+    await db.query("delete from public.videos where id=$1", [second]);
+    assert.equal(await count("products"), before + 2);
+    assert.equal(
+      (
+        await db.query(
+          "select * from public.video_products where video_id=$1",
+          [second],
+        )
+      ).rows.length,
+      0,
+    );
+    check(
+      "Content deletion preserves shared products and removes only its relationships",
+    );
+    await db.query("select set_config('request.jwt.claim.sub',$1,false)", [
+      viewer,
+    ]);
+    await assert.rejects(() => bundle(minimalVideo, [minimalProduct]));
+    await assert.rejects(() =>
+      db.query("select public.set_content_publication($1,true)", [vid]),
+    );
+    check("Viewer cannot save or publish content bundles");
     console.log(
       `Database checks passed: ${passed}. PostgreSQL via PGlite; auth/storage schemas are test fixtures.`,
     );

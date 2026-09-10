@@ -20,9 +20,8 @@ export default async function Dashboard() {
           <h1>반가워요, 한솔님.</h1>
           <p>오늘도 일상에 도움이 되는 핫템을 기록해요.</p>
         </div>
-        <Link href="/admin/products/new" className="button">
-          <Plus size={18} />
-          상품 등록
+        <Link href="/admin/contents/new" className="button">
+          <Plus size={18} />새 콘텐츠 등록
         </Link>
       </div>
       <Stats
@@ -60,8 +59,8 @@ export default async function Dashboard() {
       <section className="ranking-panel">
         <div className="section-heading">
           <h2>최근 등록 영상</h2>
-          <Link href="/admin/videos" className="text-link">
-            영상 관리 <ArrowUpRight size={15} />
+          <Link href="/admin/contents" className="text-link">
+            콘텐츠 관리 <ArrowUpRight size={15} />
           </Link>
         </div>
         <div className="table-scroll">
@@ -80,7 +79,9 @@ export default async function Dashboard() {
                 .map((v) => (
                   <tr key={v.id}>
                     <td>
-                      <Link href={`/admin/videos/${v.id}`}>{v.title}</Link>
+                      <Link href={`/admin/contents/${v.id}/edit`}>
+                        {v.title}
+                      </Link>
                     </td>
                     <td>
                       <span

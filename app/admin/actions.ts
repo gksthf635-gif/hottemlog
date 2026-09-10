@@ -203,6 +203,15 @@ export async function manageItem(
     (kind.data === "categories" && action !== "delete")
   )
     return { ok: false, message: "잘못된 작업입니다." };
+  if (kind.data === "videos" && action === "publish") {
+    const { error } = await client.rpc("set_content_publication", {
+      content_id: id,
+      is_published: value(form, "value") === "true",
+    });
+    if (error) return fail(error);
+    revalidatePath("/", "layout");
+    return { ok: true, message: "공개 상태를 변경했습니다." };
+  }
   const query =
     action === "delete"
       ? client.from(kind.data).delete().eq("id", id)
@@ -225,4 +234,49 @@ export async function manageItem(
     ok: true,
     message: action === "delete" ? "삭제했습니다." : "변경사항을 저장했습니다.",
   };
+}
+
+export async function saveBundle(
+  _state: FormState,
+  form: FormData,
+): Promise<FormState> {
+  const { client } = await requireAdmin();
+  try {
+    const { bundleSchema } = await import("@/lib/validation");
+    const parsed = bundleSchema.parse({
+      video: {
+        id: value(form, "id") || undefined,
+        slug: "content",
+        tags: [],
+        description: "",
+        sort_order: 0,
+        platform: value(form, "platform"),
+        video_url: value(form, "video_url"),
+        title: value(form, "title"),
+        thumbnail_url:
+          value(form, "thumbnail_url") ||
+          (value(form, "platform") === "youtube"
+            ? youtubeThumbnail(value(form, "video_url"))
+            : ""),
+        published: form.has("published"),
+        featured: form.has("featured"),
+        published_at: value(form, "published_at")
+          ? new Date(`${value(form, "published_at")}+09:00`).toISOString()
+          : new Date().toISOString(),
+      },
+      products: JSON.parse(value(form, "products")),
+    });
+    // Stable slugs and hidden legacy fields are preserved inside the database.
+    const { slug: _slug, ...video } = parsed.video;
+    void _slug;
+    const { error } = await client.rpc("save_content_bundle", {
+      video_data: video,
+      product_data: parsed.products,
+    });
+    if (error) return fail(error);
+  } catch (error) {
+    return fail(error);
+  }
+  revalidatePath("/", "layout");
+  redirect("/admin/contents?saved=1");
 }

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { requireAdmin } from "@/lib/auth/admin";
 import { getCatalog } from "@/lib/data/catalog";
 import { SettingsForm } from "@/components/admin/forms";
@@ -22,6 +23,14 @@ export default async function Settings() {
           SUPABASE_SECRET_KEY를 등록해 주세요.
         </div>
       )}
+      <div className="form-panel">
+        <h2>보조 관리</h2>
+        <p>
+          <Link href="/admin/categories">카테고리 관리</Link> ·{" "}
+          <Link href="/admin/products">상품 개별 관리</Link> ·{" "}
+          <Link href="/admin/videos">영상 개별 관리</Link>
+        </p>
+      </div>
       <SettingsForm settings={settings} />
     </>
   );

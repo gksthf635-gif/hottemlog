@@ -39,8 +39,8 @@ export const productSchema = z.object({
   name: required(120),
   category_id: z.uuid().nullable(),
   image_url: image,
-  short_description: required(180),
-  description: required(10000),
+  short_description: text(180),
+  description: text(10000),
   recommendation: text(2000),
   recommend_points: z.array(required(300)).max(20),
   affiliate_url: required(2048).refine(
@@ -101,3 +101,24 @@ export const linksSchema = z
     (ids) => new Set(ids).size === ids.length,
     "중복 연결은 허용하지 않습니다.",
   );
+
+export const bundleProductSchema = productSchema
+  .pick({
+    id: true,
+    name: true,
+    affiliate_url: true,
+    image_url: true,
+    category_id: true,
+  })
+  .extend({ short_description: text(180) });
+export const bundleSchema = z.object({
+  video: videoSchema,
+  products: z
+    .array(bundleProductSchema)
+    .min(1, "상품을 1개 이상 추가해 주세요.")
+    .max(100)
+    .refine((items) => {
+      const ids = items.flatMap((p) => (p.id ? [p.id] : []));
+      return new Set(ids).size === ids.length;
+    }, "같은 상품을 중복 연결할 수 없습니다."),
+});

@@ -84,7 +84,7 @@ function Field({
     </label>
   );
 }
-function ImageUpload({
+export function ImageUpload({
   name,
   label,
   initialUrl = "",
@@ -315,14 +315,12 @@ export function ContentForm({
               label="한솔의 한줄평"
               name="short_description"
               value={p?.short_description}
-              required
               maxLength={180}
             />
             <Field
               label="상세 설명"
               name="description"
               value={p?.description}
-              required
               multiline
               maxLength={10000}
             />
@@ -658,7 +656,11 @@ export function ItemActions({
         <>
           <Link
             className="button secondary small"
-            href={`/admin/${kind}/${id}`}
+            href={
+              kind === "videos"
+                ? `/admin/contents/${id}/edit`
+                : `/admin/${kind}/${id}`
+            }
           >
             수정
           </Link>
