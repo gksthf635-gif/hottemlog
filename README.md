@@ -197,6 +197,10 @@ npm run start
 
 ## 12. Vercel 환경변수와 배포
 
+현재 운영 주소: https://hottemlog-hottemlog.vercel.app
+
+GitHub `gksthf635-gif/hottemlog`의 `main` 브랜치가 Vercel `hottemlog/hottemlog`에 연결되어 push하면 자동 배포됩니다. Production 환경변수 5개가 등록되어 있으며 `SUPABASE_SECRET_KEY`는 Secret으로 저장합니다. Preview는 운영 DB에 자동 연결하지 않았으므로 필요할 때 별도 테스트 DB 환경변수를 설정하세요.
+
 1. 현재 프로젝트를 본인의 Git 저장소에 올립니다. `.env.local`이 포함되지 않는지 확인합니다.
 2. [Vercel](https://vercel.com/) → **Add New → Project**에서 저장소를 가져옵니다.
 3. Framework Preset은 **Next.js**, Node.js는 24.x 또는 지원되는 22.12+를 사용합니다.

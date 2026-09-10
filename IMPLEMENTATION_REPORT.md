@@ -16,7 +16,7 @@
 - **npm run lint 결과:** exit 0, 오류 0, 경고 0.
 - **npm run build 결과:** exit 0, Next.js 16.3.4 프로덕션 빌드 성공, TypeScript 오류 없음. 빌드한 서버에서 브라우저 검사를 다시 통과.
 - **설치 및 의존성 점검:** `npm install` 성공. `npm audit` 및 운영 의존성 점검에서 알려진 취약점 0개. 발견된 Sharp 취약 버전은 수정 버전으로 업그레이드.
-- **남아 있는 제한사항:** 실제 Supabase에 스키마·seed 적용 완료. 공개 읽기, draft 차단, 관리자 RPC 차단, Storage 업로드/공개 조회, 영상 출처를 포함한 클릭 기록을 실제 API로 검증하고 테스트 데이터를 삭제함. 공개 가입은 비활성화. 관리자 계정 생성·역할 부여 후 전체 관리자 흐름 최종 확인이 필요하며 Vercel 연결은 진행 중. SQL Editor 적용으로 CLI migration 이력은 별도 정리가 필요함. 샘플 사진은 연출용이고 SNS·쿠팡 링크는 플랫폼 홈페이지이므로 운영 콘텐츠로 교체 필요.
+- **남아 있는 제한사항:** 실제 Supabase에 스키마·seed 적용 완료. 공개 읽기, draft 차단, 관리자 RPC 차단, Storage 업로드/공개 조회, 영상 출처를 포함한 클릭 기록을 실제 API로 검증하고 테스트 데이터를 삭제함. 공개 가입은 비활성화. 관리자 계정 생성·역할 부여 후 전체 관리자 흐름 최종 확인이 필요하며 GitHub `gksthf635-gif/hottemlog`와 Vercel `hottemlog/hottemlog` 연결 완료. 운영 주소는 https://hottemlog-hottemlog.vercel.app 이며 main push 자동 배포가 설정됨. SQL Editor 적용으로 CLI migration 이력은 별도 정리가 필요함. 샘플 사진은 연출용이고 SNS·쿠팡 링크는 플랫폼 홈페이지이므로 운영 콘텐츠로 교체 필요.
 - **향후 확장 아이디어:** 예약 발행, 한국어 DB 검색, 클릭 중복 완화, 추가 영상 플랫폼, 콘텐츠별 OG 이미지.
 
 설치·운영 절차 전체: [README.md](README.md).
