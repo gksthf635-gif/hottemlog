@@ -64,7 +64,6 @@ export default async function Contents({
                 {v.featured && (
                   <span className="status-badge featured">Featured</span>
                 )}{" "}
-                <Link href={`/admin/contents/${v.id}/edit`}>수정</Link>
               </div>
               <ItemActions
                 kind="videos"
