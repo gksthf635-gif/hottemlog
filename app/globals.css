@@ -2050,3 +2050,7 @@ th:first-child {
 .bundle-results button { text-align: left; background: white; padding: 12px; border-radius: 10px; }
 .bundle-submit { position: sticky; bottom: 0; background: #fffafc; padding: 16px; border-top: 1px solid #f3dce5; z-index: 5; padding-bottom: max(16px, env(safe-area-inset-bottom)); }
 @media(max-width:640px) { .bundle-form .form-panel { padding: 18px; } .bundle-submit .button { flex: 1; } }
+.https-input { display: flex; align-items: center; border: 1px solid #e9dbe1; border-radius: 12px; background: white; overflow: hidden; }
+.https-input > span { flex: none; padding: 12px 0 12px 12px; color: #806975; }
+.https-input input { border: 0 !important; min-width: 0; flex: 1; padding-left: 3px !important; box-shadow: none; }
+.https-input:focus-within { outline: 2px solid #e998b5; }

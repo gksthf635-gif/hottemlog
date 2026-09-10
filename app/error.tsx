@@ -10,8 +10,7 @@ export default function ErrorPage({
     <main id="main-content" className="error-panel">
       <h1>잠시 연결이 어려워요.</h1>
       <p>
-        잠시 후 다시 시도해 주세요. 운영자는 Supabase 환경변수와 migration 적용
-        상태를 확인해 주세요.
+        데이터를 불러오는 중 문제가 생겼어요. 아래 버튼으로 다시 시도해 주세요.
       </p>
       <button className="button" onClick={reset}>
         다시 시도

@@ -34,7 +34,7 @@ test("YouTube supported URLs and hostile hosts", () => {
     assert.equal(youtubeId(url), null);
   assert.equal(
     youtubeThumbnail(`https://youtu.be/${id}`),
-    `https://img.youtube.com/vi/${id}/maxresdefault.jpg`,
+    `https://img.youtube.com/vi/${id}/hqdefault.jpg`,
   );
 });
 test("Affiliate redirects cannot escape approved HTTPS Coupang hosts", () => {

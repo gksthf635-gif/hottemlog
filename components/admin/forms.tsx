@@ -145,7 +145,7 @@ export function ImageUpload({
       <input
         name={name}
         aria-label={`${label} 주소`}
-        value={url}
+        value={url || automaticUrl}
         onChange={(e) => setUrl(e.target.value)}
         placeholder={automaticUrl || "이미지를 업로드해 주세요."}
         maxLength={2048}
@@ -165,7 +165,7 @@ export function ImageUpload({
       </small>
       {automaticUrl && !url && (
         <small>
-          YouTube 썸네일이 자동 적용됩니다. 표시되지 않으면 직접 업로드하세요.
+          자동 이미지가 적용됩니다. 표시되지 않으면 직접 업로드하세요.
         </small>
       )}
       {message && (

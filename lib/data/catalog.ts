@@ -1,4 +1,5 @@
 import "server-only";
+import { retryRead, transientError } from "./retry";
 import { cache } from "react";
 import { isSupabaseConfigured } from "@/lib/config";
 import { publicSupabase, serverSupabase } from "@/lib/supabase/server";
@@ -19,11 +20,13 @@ async function readAll<T>(
 ): Promise<T[]> {
   const rows: T[] = [];
   for (let offset = 0; ; offset += 500) {
-    const { data, error } = await client
-      .from(table)
-      .select("*")
-      .order(order)
-      .range(offset, offset + 499);
+    const { data, error } = await retryRead(() =>
+      client
+        .from(table)
+        .select("*")
+        .order(order)
+        .range(offset, offset + 499),
+    );
     if (error)
       throw new Error(`데이터를 불러오지 못했습니다: ${table}`, {
         cause: error,
@@ -130,9 +133,14 @@ export const getPopularity = cache(
     videos: { id: string; count: number }[];
   }> => {
     if (!isSupabaseConfigured) return { products: [], videos: [] };
-    const { data, error } = await publicSupabase().rpc("public_popularity");
-    if (error)
-      throw new Error("인기 콘텐츠를 불러오지 못했습니다.", { cause: error });
+    const { data, error } = await retryRead(() =>
+      publicSupabase().rpc("public_popularity"),
+    );
+    if (error) {
+      if (!transientError(error))
+        console.error("Popularity query failed", { code: error.code });
+      return { products: [], videos: [] };
+    }
     return data;
   },
 );

@@ -1,3 +1,4 @@
+import { isCatalogImage, normalizeHttps } from "@/lib/remote-image";
 import { z } from "zod";
 import { isAffiliateUrl, isSocialUrl, youtubeId } from "@/lib/utils";
 const text = (max: number) =>
@@ -9,24 +10,10 @@ const slug = required(100).regex(
   "주소에는 한글, 영문 소문자, 숫자와 하이픈만 사용할 수 있어요.",
 );
 const id = z.uuid().optional();
-const image = text(2048).refine((value) => {
-  if (!value) return true;
-  try {
-    const u = new URL(value);
-    const configured = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    return (
-      u.protocol === "https:" &&
-      !u.username &&
-      !u.password &&
-      (["images.unsplash.com", "img.youtube.com"].includes(u.hostname) ||
-        (!!configured &&
-          u.origin === new URL(configured).origin &&
-          u.pathname.startsWith("/storage/v1/object/public/site-images/")))
-    );
-  } catch {
-    return false;
-  }
-}, "이미지를 업로드하거나 허용된 Supabase / YouTube 이미지 주소를 입력해 주세요.");
+const image = text(2048).refine(
+  (value) => !value || isCatalogImage(value),
+  "지원하는 이미지 주소를 입력하거나 직접 업로드해 주세요.",
+);
 const common = {
   id,
   slug,
@@ -43,10 +30,9 @@ export const productSchema = z.object({
   description: text(10000),
   recommendation: text(2000),
   recommend_points: z.array(required(300)).max(20),
-  affiliate_url: required(2048).refine(
-    isAffiliateUrl,
-    "https://로 시작하는 쿠팡 링크를 입력해 주세요.",
-  ),
+  affiliate_url: required(2048)
+    .transform(normalizeHttps)
+    .refine(isAffiliateUrl, "https://로 시작하는 쿠팡 링크를 입력해 주세요."),
 });
 export const videoSchema = z
   .object({

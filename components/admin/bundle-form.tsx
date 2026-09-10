@@ -2,7 +2,8 @@
 import { useActionState, useState } from "react";
 import Link from "next/link";
 import { saveBundle } from "@/app/admin/actions";
-import { ImageUpload } from "./forms";
+import { AutomaticImage, ProductLinkImage } from "./automatic-image";
+import { normalizeHttps } from "@/lib/remote-image";
 import { youtubeThumbnail } from "@/lib/utils";
 import type { Catalog, Product, Video } from "@/types";
 type Row = { key: string; product?: Product };
@@ -74,6 +75,7 @@ export function BundleForm({
               type="url"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
+              onBlur={() => setUrl(normalizeHttps(url))}
               required
               maxLength={2048}
             />
@@ -87,12 +89,16 @@ export function BundleForm({
               maxLength={120}
             />
           </label>
-          <ImageUpload
-            key={platform}
+          <AutomaticImage
             name="thumbnail_url"
             label="영상 썸네일"
-            initialUrl={video?.platform === platform ? video.thumbnail_url : ""}
-            automaticUrl={platform === "youtube" ? youtubeThumbnail(url) : ""}
+            kind="video"
+            url={url}
+            initialUrl={
+              video?.video_url === url && video?.platform === platform
+                ? video.thumbnail_url
+                : ""
+            }
             onBusy={(b) => setBusy((s) => ({ ...s, video: b }))}
           />
           <label className="field">
@@ -150,6 +156,7 @@ export function BundleForm({
               onRemove={() =>
                 setRows((s) => s.filter((r) => r.key !== row.key))
               }
+              fallback={youtubeThumbnail(normalizeHttps(url))}
               canRemove={rows.length > 1}
               onBusy={(b) => setBusy((s) => ({ ...s, [row.key]: b }))}
             />
@@ -194,6 +201,7 @@ function ProductBlock({
   onChoose,
   onRemove,
   canRemove,
+  fallback,
   onBusy,
 }: {
   row: Row;
@@ -203,6 +211,7 @@ function ProductBlock({
   onChoose: (p?: Product) => void;
   onRemove: () => void;
   canRemove: boolean;
+  fallback: string;
   onBusy: (b: boolean) => void;
 }) {
   const [search, setSearch] = useState("");
@@ -278,21 +287,11 @@ function ProductBlock({
             maxLength={120}
           />
         </label>
-        <label className="field">
-          <span>쿠팡파트너스 링크 *</span>
-          <input
-            name={`${row.key}:affiliate_url`}
-            defaultValue={p?.affiliate_url}
-            type="url"
-            required
-            maxLength={2048}
-            placeholder="https://link.coupang.com/…"
-          />
-        </label>
-        <ImageUpload
-          name={`${row.key}:image_url`}
-          label={`상품 ${index + 1} 이미지`}
-          initialUrl={p?.image_url}
+        <ProductLinkImage
+          prefix={row.key}
+          initialLink={p?.affiliate_url}
+          initialImage={p?.image_url}
+          fallback={fallback}
           onBusy={onBusy}
         />
         <label className="field">

@@ -20,7 +20,7 @@ export function youtubeId(value: string): string | null {
 }
 export function youtubeThumbnail(url: string) {
   const id = youtubeId(url);
-  return id ? `https://img.youtube.com/vi/${id}/maxresdefault.jpg` : "";
+  return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : "";
 }
 export function isAffiliateUrl(value: string) {
   try {
