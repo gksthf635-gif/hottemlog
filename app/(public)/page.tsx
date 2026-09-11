@@ -43,6 +43,9 @@ export default async function Home() {
           <Sparkles className="hero-spark" />
         </h1>
         <p>{c.settings.site_description}</p>
+        <div className="hero-affiliate-disclosure">
+          {c.settings.affiliate_disclosure}
+        </div>
         <SearchForm />
         <div className="hero-bottom">
           <div className="suggestions">
