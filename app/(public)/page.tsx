@@ -131,10 +131,10 @@ export default async function Home() {
       </section>
       <section className="about-section container">
         <Heart size={25} />
-        <span className="eyebrow">A LITTLE NOTE FROM HANSOL</span>
+        <span className="eyebrow">HOT ITEM LOG</span>
         <h2>오늘의 핫템을 기록합니다.</h2>
         <p>
-          한솔이 직접 써보고, 찾아보고, 소개한 핫템을 기록합니다.
+          영상속의 핫템을 찾아드립니다.
           <br />
           소소한 발견이 당신의 일상에도 작은 도움이 되길 바라요.
         </p>
@@ -144,7 +144,7 @@ export default async function Home() {
           rel="noopener noreferrer"
           className="text-link"
         >
-          한솔의 일상 보러 가기 <ArrowUpRight size={16} />
+          인스타그램 보러 가기 <ArrowUpRight size={16} />
         </a>
       </section>
     </>
