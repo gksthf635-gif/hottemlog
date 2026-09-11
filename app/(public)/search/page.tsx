@@ -1,6 +1,6 @@
 import { getCatalog, searchProducts, searchVideos } from "@/lib/data/catalog";
 import { SearchForm } from "@/components/search/search-form";
-import { ProductCard } from "@/components/product/card";
+import { ProductQuickLinks } from "@/components/product/quick-links";
 import { VideoCard } from "@/components/video/card";
 import { CategoryFilter, EmptyState, SectionHeading } from "@/components/ui";
 export const metadata = {
@@ -61,17 +61,12 @@ export default async function SearchPage({
           {products.length > 0 && (
             <section className="section">
               <SectionHeading title={`상품 ${products.length}개`} />
-              <div className="product-grid">
-                {products.map((p) => (
-                  <ProductCard
-                    key={p.id}
-                    product={p}
-                    category={c.categories.find(
-                      (cat) => cat.id === p.category_id,
-                    )}
-                  />
-                ))}
-              </div>
+              <ProductQuickLinks
+                products={products}
+                categories={c.categories}
+                videos={c.videos}
+                links={c.links}
+              />
             </section>
           )}
         </>

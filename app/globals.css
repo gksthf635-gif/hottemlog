@@ -845,8 +845,8 @@ select:focus-visible {
   .video-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-  .video-grid > .video-card:nth-child(4) {
-    display: none;
+  #latest .video-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .detail-grid {
     gap: 32px;
@@ -2054,3 +2054,40 @@ th:first-child {
 .https-input > span { flex: none; padding: 12px 0 12px 12px; color: #806975; }
 .https-input input { border: 0 !important; min-width: 0; flex: 1; padding-left: 3px !important; box-shadow: none; }
 .https-input:focus-within { outline: 2px solid #e998b5; }
+
+/* Compact catalog and accessible native dialog / mobile bottom sheet. */
+.quick-section { padding-top: 12px; }
+.quick-categories { display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 14px; scrollbar-width: thin; }
+.quick-categories button { flex: none; min-height: 44px; padding: 8px 19px; border: 1px solid var(--border); border-radius: 999px; background: white; color: var(--ink); }
+.quick-categories button[aria-pressed="true"] { background: var(--pink); border-color: var(--pink); font-weight: 700; }
+.quick-count { color: var(--muted); font-size: 13px; margin: 10px 0; }
+.quick-list { list-style: none; padding: 0; margin: 0; background: white; border: 1px solid var(--border); border-radius: 20px; overflow: hidden; }
+.quick-list:empty { display: none; }
+.quick-list li + li { border-top: 1px solid var(--border); }
+.quick-product { width: 100%; display: flex; gap: 14px; align-items: center; min-height: 70px; padding: 18px 24px; background: white; border: 0; text-align: left; }
+.quick-product:hover { background: var(--bg); }
+.quick-name { flex: 1; min-width: 0; font-weight: 600; overflow-wrap: anywhere; }
+.quick-badge { flex: none; padding: 3px 9px; background: var(--bg); border-radius: 8px; font-size: 12px; color: #80616d; }
+.quick-product > svg { flex: none; color: var(--cta); }
+.quick-empty { text-align: center; padding: 44px 18px; color: var(--muted); background: white; border: 1px dashed var(--border); border-radius: 20px; }
+.product-popup { position: fixed; inset: 0; margin: auto; width: min(480px, calc(100% - 40px)); max-height: calc(100dvh - 48px); overflow-y: auto; overscroll-behavior: contain; padding: 36px 28px 24px; border: 1px solid var(--border); border-radius: 26px; color: var(--ink); background: white; box-shadow: 0 24px 80px #38232d2b; }
+.product-popup::backdrop { background: #28232d70; backdrop-filter: blur(3px); }
+.product-popup h2 { padding-right: 30px; margin: 10px 0 18px; font-size: 23px; overflow-wrap: anywhere; }
+.popup-close { position: absolute; right: 14px; top: 14px; width: 44px; height: 44px; display: grid; place-items: center; background: var(--bg); border: 0; border-radius: 50%; }
+.popup-image { width: 160px; height: 160px; position: relative; border-radius: 16px; overflow: hidden; margin: 0 auto 20px; background: var(--bg); }
+.popup-image img { object-fit: contain; }
+.popup-note { font-size: 14px; color: #655d63; margin-bottom: 16px; overflow-wrap: anywhere; }
+.popup-video { display: grid; gap: 4px; border-radius: 14px; padding: 14px; background: var(--bg); font-size: 14px; margin-bottom: 20px; }
+.popup-video > span, .popup-video small { color: var(--muted); font-size: 12px; }
+.popup-video a { text-decoration: underline; text-underline-offset: 3px; }
+.popup-cta { display: flex; width: 100%; justify-content: center; min-height: 54px; margin-top: 20px; }
+.popup-disclosure { color: var(--muted); font-size: 12px; line-height: 1.6; text-align: center; margin-top: 12px; }
+.sheet-handle { display: none; }
+.quick-product:focus-visible, .quick-categories button:focus-visible, .product-popup :focus-visible { outline: 3px solid var(--cta); outline-offset: -3px; }
+@media(max-width:640px) {
+ .quick-product { padding: 16px; gap: 8px; min-height: 64px; }
+ .product-popup { inset: auto 0 0; margin: 0; width: 100%; max-width: none; max-height: 88dvh; border-radius: 24px 24px 0 0; padding: 38px 20px max(24px, env(safe-area-inset-bottom)); }
+ .sheet-handle { display: block; position: absolute; top: 12px; left: calc(50% - 20px); width: 40px; height: 4px; border-radius: 8px; background: #d9c6cd; }
+ .product-popup h2 { font-size: 21px; }
+ .popup-image { width: 140px; height: 140px; }
+}

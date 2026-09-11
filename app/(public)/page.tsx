@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { ArrowDown, ArrowUpRight, Sparkles, Heart } from "lucide-react";
-import { getCatalog, getPopularProducts } from "@/lib/data/catalog";
+import { ArrowDown, Sparkles } from "lucide-react";
+import { getCatalog } from "@/lib/data/catalog";
 import { SearchForm } from "@/components/search/search-form";
 import { VideoCard } from "@/components/video/card";
-import { ProductCard } from "@/components/product/card";
-import { CategoryFilter, SectionHeading } from "@/components/ui";
+import { ProductQuickLinks } from "@/components/product/quick-links";
+import { SectionHeading } from "@/components/ui";
 export async function generateMetadata() {
   const { settings } = await getCatalog();
   return {
@@ -19,27 +19,14 @@ export async function generateMetadata() {
   };
 }
 export default async function Home() {
-  const [c, popular] = await Promise.all([getCatalog(), getPopularProducts()]);
-  const productsFor = (platform: string) =>
-    c.products
-      .filter((p) =>
-        c.links.some(
-          (l) =>
-            l.product_id === p.id &&
-            c.videos.some(
-              (v) => v.id === l.video_id && v.platform === platform,
-            ),
-        ),
-      )
-      .slice(0, 4);
-  const cards = (products: typeof c.products) =>
-    products.map((p) => (
-      <ProductCard
-        key={p.id}
-        product={p}
-        category={c.categories.find((cat) => cat.id === p.category_id)}
-      />
-    ));
+  const c = await getCatalog();
+  const latest = [...c.videos]
+    .sort(
+      (a, b) =>
+        b.published_at.localeCompare(a.published_at) ||
+        a.sort_order - b.sort_order,
+    )
+    .slice(0, 4);
   return (
     <>
       <section className="hero container">
@@ -74,12 +61,15 @@ export default async function Home() {
       <section className="section container" id="latest">
         <SectionHeading
           eyebrow="THE LATEST LOG"
-          title="방금 올라온 핫템"
+          title="최신 영상"
           description="방금 본 그 영상, 궁금했던 제품을 만나보세요."
           href="/videos"
         />
+        {!latest.length && (
+          <p className="quick-empty">아직 등록된 영상이 없어요.</p>
+        )}
         <div className="video-grid">
-          {c.videos.slice(0, 4).map((v, i) => (
+          {latest.map((v, i) => (
             <VideoCard
               key={v.id}
               video={v}
@@ -89,63 +79,19 @@ export default async function Home() {
           ))}
         </div>
       </section>
-      <section className="section container">
+      <section className="section container quick-section" id="hot-items">
         <SectionHeading
-          eyebrow="LOVED LATELY"
-          title="요즘 많이 보는 핫템"
-          description="영상 댓글에서 많이 물어본 제품들을 모았어요."
-          href="/products?sort=popular"
+          eyebrow="FIND YOUR HOT ITEM"
+          title="핫템 바로가기"
+          description="영상속의 핫템을 찾아드립니다."
         />
-        <div className="product-grid">{cards(popular.slice(0, 4))}</div>
-      </section>
-      <section className="category-section">
-        <div className="container">
-          <SectionHeading
-            eyebrow="FIND YOUR FAVORITE"
-            title="어떤 핫템을 찾으세요?"
-          />
-          <CategoryFilter categories={c.categories} />
-        </div>
-      </section>
-      {(["instagram", "youtube"] as const).map((platform) => (
-        <section className="section container" key={platform}>
-          <SectionHeading
-            eyebrow={
-              platform === "instagram" ? "FROM INSTAGRAM" : "FROM YOUTUBE"
-            }
-            title={`${platform === "instagram" ? "Instagram" : "YouTube"}에서 소개한 제품`}
-            href={`/products?platform=${platform}`}
-          />
-          <div className="product-grid">{cards(productsFor(platform))}</div>
-        </section>
-      ))}
-      <section className="section container">
-        <SectionHeading
-          eyebrow="THE COLLECTION"
-          title="전체 추천템"
-          description="일상에 쏙, 마음에 쏙. 하나씩 기록한 추천템."
-          href="/products"
-          action="추천템 더 보기"
+        <ProductQuickLinks
+          products={c.products}
+          categories={c.categories}
+          videos={c.videos}
+          links={c.links}
+          filter
         />
-        <div className="product-grid">{cards(c.products.slice(0, 8))}</div>
-      </section>
-      <section className="about-section container">
-        <Heart size={25} />
-        <span className="eyebrow">HOT ITEM LOG</span>
-        <h2>오늘의 핫템을 기록합니다.</h2>
-        <p>
-          영상속의 핫템을 찾아드립니다.
-          <br />
-          소소한 발견이 당신의 일상에도 작은 도움이 되길 바라요.
-        </p>
-        <a
-          href={c.settings.instagram_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-link"
-        >
-          인스타그램 보러 가기 <ArrowUpRight size={16} />
-        </a>
       </section>
     </>
   );

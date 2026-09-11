@@ -8,7 +8,7 @@ import {
 } from "@/lib/data/catalog";
 import { Media } from "@/components/media";
 import { PlatformBadge } from "@/components/video/card";
-import { ProductCard } from "@/components/product/card";
+import { ProductQuickLinks } from "@/components/product/quick-links";
 import { EmptyState, SectionHeading } from "@/components/ui";
 import { dateLabel } from "@/lib/utils";
 export async function generateMetadata({
@@ -65,9 +65,11 @@ export default async function VideoDetail({
           <p className="video-meta">
             {dateLabel(v.published_at)} · 영상 속 추천템 {products.length}개
           </p>
-          <div className="prose">
-            <p>{v.description}</p>
-          </div>
+          {v.description && (
+            <div className="prose">
+              <p>{v.description}</p>
+            </div>
+          )}
           <a
             href={v.video_url}
             target="_blank"
@@ -86,16 +88,14 @@ export default async function VideoDetail({
           description="궁금했던 제품을 바로 확인해 보세요."
         />
         {products.length ? (
-          <div className="product-grid">
-            {products.map((p) => (
-              <ProductCard
-                key={p.id}
-                product={p}
-                category={c.categories.find((cat) => cat.id === p.category_id)}
-                videoId={v.id}
-              />
-            ))}
-          </div>
+          <ProductQuickLinks
+            products={products}
+            categories={c.categories}
+            videos={[v]}
+            links={c.links}
+            videoId={v.id}
+            preserveOrder
+          />
         ) : (
           <EmptyState
             title="제품 정보를 준비하고 있어요."
