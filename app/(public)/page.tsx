@@ -43,8 +43,13 @@ export default async function Home() {
           <Sparkles className="hero-spark" />
         </h1>
         <p>{c.settings.site_description}</p>
-        <div className="hero-affiliate-disclosure">
-          {c.settings.affiliate_disclosure}
+        <div className="hero-affiliate-disclosure" aria-label="쿠팡 파트너스 안내">
+          <strong>
+            {c.settings.affiliate_disclosure.replace(
+              /제공\s*받을\s*수\s*있습니다/g,
+              "제공받습니다",
+            )}
+          </strong>
         </div>
         <SearchForm />
         <div className="hero-bottom">

@@ -2092,4 +2092,18 @@ th:first-child {
  .popup-image { width: 140px; height: 140px; }
 }
 
-.hero-affiliate-disclosure { margin: 12px 0 18px; max-width: 680px; color: #655d63; font-size: 13px; line-height: 1.7; word-break: keep-all; overflow-wrap: anywhere; }
+.hero-affiliate-disclosure {
+  margin: 16px 0 20px;
+  max-width: 680px;
+  padding: 16px 18px;
+  border: 1px solid #e8a4bd;
+  border-left: 4px solid #aa4568;
+  border-radius: 14px;
+  background: #fce4ec;
+  color: #73324b;
+  font-size: clamp(14px, 1.3vw, 16px);
+  line-height: 1.75;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+.hero-affiliate-disclosure strong { font-weight: 700; }
