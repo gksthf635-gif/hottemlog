@@ -10,6 +10,7 @@ import { AffiliateLink, ProductCard } from "@/components/product/card";
 import { VideoCard } from "@/components/video/card";
 import { SectionHeading } from "@/components/ui";
 import { siteUrl } from "@/lib/config";
+import { AffiliateDisclosure } from "@/components/affiliate-disclosure";
 export async function generateMetadata({
   params,
 }: {
@@ -70,6 +71,7 @@ export default async function ProductDetail({
         <span>/</span>
         <span>{category?.name || "기타"}</span>
       </nav>
+      <AffiliateDisclosure />
       <div className="detail-grid">
         <div className="detail-image">
           <Media
@@ -107,7 +109,6 @@ export default async function ProductDetail({
             </>
           )}
           <AffiliateLink product={p} />
-          <p className="disclosure">{c.settings.affiliate_disclosure}</p>
         </div>
       </div>
       {videos.length > 0 && (

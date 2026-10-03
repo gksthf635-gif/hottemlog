@@ -3,6 +3,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight, ChevronRight, X } from "lucide-react";
 import { Media } from "@/components/media";
+import { AffiliateDisclosure } from "@/components/affiliate-disclosure";
 import type { Category, Product, Video, VideoProduct } from "@/types";
 
 type Props = {
@@ -166,6 +167,7 @@ export function ProductQuickLinks({
             </button>
             <span className="eyebrow">HOT ITEM LOG</span>
             <h2 id={headingId}>{selected.name}</h2>
+            <AffiliateDisclosure />
             {selected.image_url && (
               <div className="popup-image">
                 <Media
@@ -197,9 +199,6 @@ export function ProductQuickLinks({
             >
               쿠팡에서 보기 <ArrowUpRight size={19} />
             </a>
-            <p className="popup-disclosure">
-              이 링크를 통해 구매 시 일정액의 수수료를 제공받을 수 있습니다.
-            </p>
           </>
         )}
       </dialog>

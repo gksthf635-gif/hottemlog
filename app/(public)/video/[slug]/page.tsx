@@ -11,6 +11,7 @@ import { PlatformBadge } from "@/components/video/card";
 import { ProductQuickLinks } from "@/components/product/quick-links";
 import { EmptyState, SectionHeading } from "@/components/ui";
 import { dateLabel } from "@/lib/utils";
+import { AffiliateDisclosure } from "@/components/affiliate-disclosure";
 export async function generateMetadata({
   params,
 }: {
@@ -50,6 +51,7 @@ export default async function VideoDetail({
         <span>/</span>
         <Link href="/videos">영상 속 핫템</Link>
       </nav>
+      <AffiliateDisclosure />
       <div className="detail-grid video-detail-grid">
         <div className="detail-video-image">
           <Media
@@ -79,7 +81,6 @@ export default async function VideoDetail({
             {v.platform === "instagram" ? "인스타그램" : "유튜브"}에서 영상 보기{" "}
             <ArrowUpRight size={18} />
           </a>
-          <p className="disclosure">{c.settings.affiliate_disclosure}</p>
         </div>
       </div>
       <section className="section">

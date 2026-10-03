@@ -5,6 +5,7 @@ import { SearchForm } from "@/components/search/search-form";
 import { VideoCard } from "@/components/video/card";
 import { ProductQuickLinks } from "@/components/product/quick-links";
 import { SectionHeading } from "@/components/ui";
+import { AFFILIATE_DISCLOSURE } from "@/components/affiliate-disclosure";
 export async function generateMetadata() {
   const { settings } = await getCatalog();
   return {
@@ -44,9 +45,7 @@ export default async function Home() {
         </h1>
         <p>{c.settings.site_description}</p>
         <div className="hero-affiliate-disclosure" aria-label="쿠팡 파트너스 안내">
-          <strong>
-            이 포스팅은 쿠팡파트너스 활동의 일환으로 이에따른 일정액의 수수료를 제공받습니다.
-          </strong>
+          <strong>{AFFILIATE_DISCLOSURE}</strong>
         </div>
         <SearchForm />
         <div className="hero-bottom">

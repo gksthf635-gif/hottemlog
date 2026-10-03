@@ -2081,7 +2081,6 @@ th:first-child {
 .popup-video > span, .popup-video small { color: var(--muted); font-size: 12px; }
 .popup-video a { text-decoration: underline; text-underline-offset: 3px; }
 .popup-cta { display: flex; width: 100%; justify-content: center; min-height: 54px; margin-top: 20px; }
-.popup-disclosure { color: var(--muted); font-size: 12px; line-height: 1.6; text-align: center; margin-top: 12px; }
 .sheet-handle { display: none; }
 .quick-product:focus-visible, .quick-categories button:focus-visible, .product-popup :focus-visible { outline: 3px solid var(--cta); outline-offset: -3px; }
 @media(max-width:640px) {
@@ -2092,9 +2091,8 @@ th:first-child {
  .popup-image { width: 140px; height: 140px; }
 }
 
-.hero-affiliate-disclosure {
-  margin: 16px 0 20px;
-  max-width: 680px;
+.hero-affiliate-disclosure,
+.post-affiliate-disclosure {
   padding: 16px 18px;
   border: 1px solid #e8a4bd;
   border-left: 4px solid #aa4568;
@@ -2106,4 +2104,21 @@ th:first-child {
   word-break: keep-all;
   overflow-wrap: anywhere;
 }
-.hero-affiliate-disclosure strong { font-weight: 700; }
+.hero-affiliate-disclosure {
+  margin: 16px 0 20px;
+  max-width: 680px;
+}
+.post-affiliate-disclosure { margin-bottom: 24px; }
+.hero-affiliate-disclosure strong,
+.post-affiliate-disclosure strong { font-weight: 700; }
+.advertisement-label {
+  display: table;
+  margin-bottom: 8px;
+  padding: 3px 10px;
+  border-radius: 6px;
+  background: #73324b;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+}
